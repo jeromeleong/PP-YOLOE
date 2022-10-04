@@ -3,7 +3,7 @@ import functools
 import cv2
 import numpy as np
 from PIL import ImageFont
-
+import matplotlib.pyplot as plt
 from utils.predictor import DetectionPredictor
 from utils.utils import add_arguments, print_arguments
 
@@ -35,8 +35,12 @@ def main():
     # 在图片上画结果
     img = predictor.draw_box(image, results=result, font_style=font_style)
     # 显示图像
-    cv2.imshow('result', img)
-    cv2.waitKey(0)
+    
+    fig = plt.gcf()
+    fig.set_size_inches(18, 10)
+    plt.axis("off")
+    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+    plt.show()
 
 
 if __name__ == "__main__":
