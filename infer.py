@@ -3,18 +3,18 @@ import functools
 import cv2
 import numpy as np
 from PIL import ImageFont
-import matplotlib.pyplot as plt
 from utils.predictor import DetectionPredictor
 from utils.utils import add_arguments, print_arguments
 
 parser = argparse.ArgumentParser(description=__doc__)
 add_arg = functools.partial(add_arguments, argparser=parser)
-add_arg('use_gpu',          bool,   True,                           '是否使用GPU进行预测')
-add_arg('use_tensorrt',     bool,   False,                          '是否使用TensorRT加速')
-add_arg('image_path',       str,    'dataset/test.jpg',             '预测的图片路径')
-add_arg('image_shape',      str,    '640,640',                      '导出模型图像输入大小')
-add_arg('model_dir',        str,    'output_inference/PPYOLOE_M',   '预测模型文件夹路径')
-add_arg('labels_list_path', str,    'dataset/label_list.txt',       '数据标签列表文件路径')
+add_arg('use_gpu',           bool,   True,                           '是否使用GPU进行预测')
+add_arg('use_tensorrt',      bool,   False,                          '是否使用TensorRT加速')
+add_arg('image_path',        str,    'dataset/test.jpg',             '预测的图片路径')
+add_arg('output_image_path', str,    'dataset/output.jpg',           '预测後的图片路径')
+add_arg('image_shape',       str,    '640,640',                      '导出模型图像输入大小')
+add_arg('model_dir',         str,    'output_inference/PPYOLOE_M',   '预测模型文件夹路径')
+add_arg('labels_list_path',  str,    'dataset/label_list.txt',       '数据标签列表文件路径')
 args = parser.parse_args()
 print_arguments(args)
 
@@ -34,13 +34,8 @@ def main():
     print('识别结果：', result)
     # 在图片上画结果
     img = predictor.draw_box(image, results=result, font_style=font_style)
-    # 显示图像
-    
-    fig = plt.gcf()
-    fig.set_size_inches(18, 10)
-    plt.axis("off")
-    plt.imshow(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-    plt.show()
+    # 儲存圖片
+    cv2.imwrite(args.output_image_path,img)
 
 
 if __name__ == "__main__":
